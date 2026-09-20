@@ -1,5 +1,9 @@
 # IndicASR
 
+[![Swift 5.9](https://img.shields.io/badge/Swift-5.9-orange.svg)](https://swift.org)
+[![Platforms](https://img.shields.io/badge/platforms-iOS%2016%20%7C%20macOS%2014-lightgrey.svg)](https://developer.apple.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 Offline speech-to-text for 22 Indian languages on iOS, running AI4Bharat's
 [IndicConformer 600M](https://huggingface.co/ai4bharat/indic-conformer-600m-multilingual)
 through ONNX Runtime. No network at inference time.
@@ -208,6 +212,20 @@ detail and the measurements behind them are in
 | `tools/stage_upload.py` | assemble `models/upload/` with exactly what a host needs |
 | `tools/dev.sh` | build, test, run, serve, push-model, stage, xcode |
 | `tools/check-integration.sh` | build a throwaway consumer against the package over SPM |
+
+## Documentation
+
+The package ships a DocC catalog, so symbols carry documentation in Xcode's
+Quick Help and the documentation viewer. To build the archive:
+
+```bash
+tools/dev.sh docs
+```
+
+DocC is built for iOS. ONNX Runtime's Objective-C headers include C++ that
+clang cannot parse when extracting macOS symbol graphs, so a macOS docs build
+fails inside the dependency; `.spi.yml` pins Swift Package Index to iOS for
+the same reason.
 
 ## Tests
 
