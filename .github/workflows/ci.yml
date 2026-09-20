@@ -16,17 +16,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_16.app
-
-      - name: Build
-        run: swift build -v
-
-      # The recognizer tests need a quantized model, which is far too large to
-      # fetch in CI, so they skip. The frontend tests run against committed
-      # golden vectors and cover the part most likely to regress silently.
-      - name: Test
-        run: swift test -v
+      # The recognizer tests need a quantized model, far too large to fetch in
+      # CI, so they skip. The frontend tests run against committed golden
+      # vectors and cover the part most likely to regress silently: a wrong
+      # window or filterbank produces plausible output rather than an error.
+      - run: swift build -v
+      - run: swift test -v
 
   ios:
     name: Build for iOS
@@ -34,8 +29,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_16.app
+      # Printed so a missing platform is obvious in the log rather than
+      # surfacing as "Unable to find a destination matching...".
+      - name: Toolchain
+        run: |
+          xcodebuild -version
+          xcodebuild -showsdks | grep -i ios || echo "NO iOS SDK"
 
       - name: Build
         run: |
@@ -50,9 +49,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_16.app
+      - name: Toolchain
+        run: |
+          xcodebuild -version
+          xcodebuild -showsdks | grep -i ios || echo "NO iOS SDK"
 
+      # Built for iOS deliberately: ONNX Runtime's Objective-C headers include
+      # C++ that clang cannot parse when extracting macOS symbol graphs, so a
+      # macOS docs build fails inside the dependency.
       - name: DocC
         run: |
           xcodebuild docbuild \
