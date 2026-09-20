@@ -1,0 +1,12 @@
+# Swift Package Index build configuration.
+#
+# Documentation is built for iOS rather than macOS: ONNX Runtime's
+# Objective-C headers include C++ that clang's -extract-api cannot parse when
+# building symbol graphs for macOS, which fails the docs build there. The iOS
+# build is clean, and iOS is the platform this package targets anyway.
+version: 1
+builder:
+  configs:
+    - platform: ios
+      documentation_targets:
+        - IndicASR

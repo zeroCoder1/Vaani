@@ -73,6 +73,15 @@ case "${1:-help}" in
     echo "pushed $(ls "$DEST" | wc -l | tr -d ' ') files -> $DEST"
     du -sh "$DEST"
     ;;
+  docs)
+    # DocC is built for iOS: ONNX Runtime's Objective-C headers include C++
+    # that clang cannot parse when extracting macOS symbol graphs.
+    cd "$REPO"
+    xcodebuild docbuild -scheme IndicASR \
+      -destination 'generic/platform=iOS' \
+      -derivedDataPath "$DD" CODE_SIGNING_ALLOWED=NO | tail -3
+    find "$DD" -name '*.doccarchive' | head -1
+    ;;
   stage)
     # Assemble exactly what a host needs, with checksums, into models/upload/.
     "$REPO/.venv/bin/python" "$REPO/tools/make_manifest.py" --src "$REPO/models/${2:-int8_nc}"
@@ -96,6 +105,7 @@ case "${1:-help}" in
     echo "  test [debug|release]   run the Swift test suite"
     echo "  app                    build the demo app for the simulator"
     echo "  run                    build, install and launch the demo app"
+    echo "  docs                   build the DocC archive"
     echo "  stage [int8_nc]        assemble models/upload/ for hosting"
     echo "  serve [int8_nc]        host the quantized model on :8000"
     ;;
