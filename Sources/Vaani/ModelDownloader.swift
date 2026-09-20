@@ -32,12 +32,22 @@ public actor ModelDownloader {
         public let bytesReceived: Int64
         /// Expected size of this file, from the manifest or the response.
         public let bytesExpected: Int64
+        /// Bytes received across the whole download so far.
+        public let totalBytesReceived: Int64
+        /// Total size of everything being downloaded.
+        public let totalBytesExpected: Int64
 
-        /// Progress through the current file, 0 to 1. This is per file, not
-        /// across the whole download; the encoder dominates by size, so
-        /// weight by `bytesExpected` for an overall figure.
+        /// Progress through the current file, 0 to 1.
         public var fraction: Double {
             bytesExpected > 0 ? Double(bytesReceived) / Double(bytesExpected) : 0
+        }
+
+        /// Progress across the whole download, 0 to 1. Prefer this for a
+        /// progress bar: the encoder is about 97% of the bytes, so per-file
+        /// progress spends almost all its time on one file.
+        public var totalFraction: Double {
+            totalBytesExpected > 0
+                ? Double(totalBytesReceived) / Double(totalBytesExpected) : 0
         }
     }
 
@@ -49,8 +59,10 @@ public actor ModelDownloader {
         let version: String
         let variant: String
         let shared: [String: Entry]
-        /// Keys contain `{lang}`, substituted per request.
-        let perLanguage: [String: Entry]
+        /// Language code to that language's files. Each carries its own
+        /// checksum: the per-language heads are all the same size, so a shared
+        /// entry would silently serve one language's head for another.
+        let perLanguage: [String: [String: Entry]]
         let profiles: [String: [String]]
     }
 
@@ -60,7 +72,10 @@ public actor ModelDownloader {
 
     private let source: URL
     private let session: URLSession
+    private let delegate = DownloadDelegate()
     private var cached: Manifest?
+    private var completedBytes: Int64 = 0
+    private var totalBytes: Int64 = 0
     private var observations: [NSKeyValueObservation] = []
 
     /// - Parameters:
@@ -80,7 +95,13 @@ public actor ModelDownloader {
         // if local-network access has not been granted, which looks exactly
         // like a hang with no error for up to timeoutIntervalForResource.
         configuration.waitsForConnectivity = false
-        session = URLSession(configuration: configuration)
+        // A delegate, not downloadTask(with:completionHandler:) plus KVO.
+        // Progress.completedUnitCount is coalesced and fired twice for a 23 MB
+        // transfer in testing, which leaves a progress bar apparently frozen for
+        // the 878 MB encoder. didWriteData reports every chunk.
+        session = URLSession(configuration: configuration,
+                             delegate: delegate,
+                             delegateQueue: nil)
 
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         var url = directory
@@ -115,8 +136,11 @@ public actor ModelDownloader {
         let missing = try files(for: language, decoders: decoders, in: manifest)
             .filter { !isPresent($0) }
 
+        totalBytes = missing.reduce(0) { $0 + $1.entry.size }
+        completedBytes = 0
         for (index, file) in missing.enumerated() {
             try await download(file, index: index, of: missing.count, onProgress: onProgress)
+            completedBytes += file.entry.size
         }
         store(manifest)
         return directory
@@ -158,10 +182,12 @@ public actor ModelDownloader {
             return ($0, entry)
         }
         if decoders.contains(.rnnt) {
-            for (pattern, entry) in manifest.perLanguage {
-                required.append((pattern.replacingOccurrences(of: "{lang}", with: language.code),
-                                 entry))
+            guard let files = manifest.perLanguage[language.code] else {
+                throw SpeechError.malformedModel(
+                    "manifest has no files for language '\(language.code)'")
             }
+            required.append(contentsOf: files.sorted { $0.key < $1.key }
+                .map { (name: $0.key, entry: $0.value) })
         }
         return required
     }
@@ -201,51 +227,29 @@ public actor ModelDownloader {
     private func download(_ file: File, index: Int, of count: Int,
                           onProgress: (@Sendable (Progress) -> Void)?) async throws {
         let destination = directory.appendingPathComponent(file.name)
-        let remote = source.appendingPathComponent(file.name)
         let staged = directory.appendingPathComponent(file.name + ".part")
         try? FileManager.default.removeItem(at: staged)
 
-        // Report before any bytes arrive so the UI names the file it is on
-        // rather than sitting on whatever was shown last.
         let expected = file.entry.size
-        onProgress?(Progress(file: file.name, fileIndex: index, fileCount: count,
-                             bytesReceived: 0, bytesExpected: expected))
+        let alreadyDone = completedBytes
+        let overall = totalBytes
+        let report: @Sendable (Int64, Int64) -> Void = { received, fileTotal in
+            onProgress?(Progress(file: file.name,
+                                 fileIndex: index,
+                                 fileCount: count,
+                                 bytesReceived: received,
+                                 bytesExpected: fileTotal > 0 ? fileTotal : expected,
+                                 totalBytesReceived: alreadyDone + received,
+                                 totalBytesExpected: overall))
+        }
+        report(0, expected)
 
-        // downloadTask with a completion handler and KVO progress, rather than
-        // download(from:delegate:). A URLSessionDownloadDelegate has to
-        // implement didFinishDownloadingTo, and that competes with the async
-        // variant's own completion handling - on iOS the continuation can fail
-        // to resume, which presents as an unbreakable hang with no error.
+        let task = session.downloadTask(with: source.appendingPathComponent(file.name))
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
-            let task = session.downloadTask(with: remote) { temporary, response, error in
-                if let error {
-                    continuation.resume(throwing: SpeechError.downloadFailed(
-                        "\(file.name): \(error.localizedDescription)"))
-                    return
-                }
-                let code = (response as? HTTPURLResponse)?.statusCode ?? -1
-                guard code == 200, let temporary else {
-                    continuation.resume(throwing: SpeechError.downloadFailed(
-                        "\(file.name) returned HTTP \(code)"))
-                    return
-                }
-                // The temporary file is removed as soon as this handler returns.
-                do {
-                    try FileManager.default.moveItem(at: temporary, to: staged)
-                    continuation.resume()
-                } catch {
-                    continuation.resume(throwing: SpeechError.downloadFailed(
-                        "\(file.name): could not stage the download"))
-                }
+            delegate.register(task, movingTo: staged, name: file.name,
+                              progress: report) { result in
+                continuation.resume(with: result)
             }
-
-            let observation = task.progress.observe(\.completedUnitCount) { progress, _ in
-                onProgress?(Progress(file: file.name, fileIndex: index, fileCount: count,
-                                     bytesReceived: progress.completedUnitCount,
-                                     bytesExpected: progress.totalUnitCount > 0
-                                        ? progress.totalUnitCount : expected))
-            }
-            observations.append(observation)
             task.resume()
         }
 
@@ -258,8 +262,7 @@ public actor ModelDownloader {
 
         try? FileManager.default.removeItem(at: destination)
         try FileManager.default.moveItem(at: staged, to: destination)
-        onProgress?(Progress(file: file.name, fileIndex: index, fileCount: count,
-                             bytesReceived: expected, bytesExpected: expected))
+        report(expected, expected)
     }
 
     /// Hash in chunks; these files do not fit comfortably in memory.
@@ -271,5 +274,76 @@ public actor ModelDownloader {
             hasher.update(data: chunk)
         }
         return hasher.finalize().map { String(format: "%02x", $0) }.joined()
+    }
+}
+
+/// Bridges `URLSessionDownloadDelegate` to async/await.
+///
+/// The temporary file is deleted as soon as `didFinishDownloadingTo` returns,
+/// so the move happens inside that callback rather than afterwards.
+private final class DownloadDelegate: NSObject, URLSessionDownloadDelegate, @unchecked Sendable {
+
+    private struct Pending {
+        let destination: URL
+        let name: String
+        let progress: @Sendable (Int64, Int64) -> Void
+        let finish: @Sendable (Result<Void, Error>) -> Void
+        var moved: Result<Void, Error>?
+    }
+
+    private let lock = NSLock()
+    private var pending: [Int: Pending] = [:]
+
+    func register(_ task: URLSessionTask,
+                  movingTo destination: URL,
+                  name: String,
+                  progress: @escaping @Sendable (Int64, Int64) -> Void,
+                  finish: @escaping @Sendable (Result<Void, Error>) -> Void) {
+        lock.withLock {
+            pending[task.taskIdentifier] = Pending(destination: destination, name: name,
+                                                   progress: progress, finish: finish)
+        }
+    }
+
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask,
+                    didWriteData bytesWritten: Int64, totalBytesWritten: Int64,
+                    totalBytesExpectedToWrite: Int64) {
+        let handler = lock.withLock { pending[downloadTask.taskIdentifier]?.progress }
+        handler?(totalBytesWritten, totalBytesExpectedToWrite)
+    }
+
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask,
+                    didFinishDownloadingTo location: URL) {
+        guard var entry = lock.withLock({ pending[downloadTask.taskIdentifier] }) else { return }
+
+        let code = (downloadTask.response as? HTTPURLResponse)?.statusCode ?? -1
+        if code != 200 {
+            entry.moved = .failure(SpeechError.downloadFailed(
+                "\(entry.name) returned HTTP \(code)"))
+        } else {
+            do {
+                try? FileManager.default.removeItem(at: entry.destination)
+                try FileManager.default.moveItem(at: location, to: entry.destination)
+                entry.moved = .success(())
+            } catch {
+                entry.moved = .failure(SpeechError.downloadFailed(
+                    "\(entry.name): could not stage the download"))
+            }
+        }
+        lock.withLock { pending[downloadTask.taskIdentifier] = entry }
+    }
+
+    func urlSession(_ session: URLSession, task: URLSessionTask,
+                    didCompleteWithError error: Error?) {
+        guard let entry = lock.withLock({ pending.removeValue(forKey: task.taskIdentifier) })
+        else { return }
+
+        if let error {
+            entry.finish(.failure(SpeechError.downloadFailed(
+                "\(entry.name): \(error.localizedDescription)")))
+        } else {
+            entry.finish(entry.moved ?? .failure(SpeechError.downloadFailed(
+                "\(entry.name): finished without producing a file")))
+        }
     }
 }

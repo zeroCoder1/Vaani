@@ -43,6 +43,46 @@ def expand(src: pathlib.Path, names: list[str]) -> list[str]:
     return out
 
 
+def verify(manifest: dict, src: pathlib.Path) -> None:
+    """Check the manifest against the files it describes.
+
+    An earlier version templated the per-language entries and filled them from
+    Hindi, so every other language carried Hindi's checksum. Sizes are identical
+    across languages, so nothing caught it until a download failed on a device.
+    """
+    problems = []
+
+    def check(name: str, entry: dict) -> None:
+        path = src / name
+        if not path.exists():
+            problems.append(f"{name}: missing")
+            return
+        if path.stat().st_size != entry["size"]:
+            problems.append(f"{name}: size {path.stat().st_size} != {entry['size']}")
+        if entry.get("sha256") and sha256(path) != entry["sha256"]:
+            problems.append(f"{name}: checksum does not match the file")
+
+    for name, entry in manifest["shared"].items():
+        check(name, entry)
+
+    seen: dict[str, str] = {}
+    for lang, files in manifest["perLanguage"].items():
+        for name, entry in files.items():
+            check(name, entry)
+            digest = entry.get("sha256")
+            if digest and digest in seen and seen[digest] != name:
+                problems.append(
+                    f"{name} shares a checksum with {seen[digest]}; "
+                    "per-language files must each carry their own")
+            if digest:
+                seen[digest] = name
+
+    if problems:
+        raise SystemExit("manifest is wrong:\n  " + "\n  ".join(problems))
+    print(f"  verified {len(manifest['shared'])} shared and "
+          f"{sum(len(f) for f in manifest['perLanguage'].values())} per-language files")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--src", default="models/int8_nc")
@@ -70,14 +110,23 @@ def main() -> int:
         shared[n] = {"size": p.stat().st_size,
                      "sha256": None if args.no_hash else sha256(p)}
 
-    per_lang = {}
+    # Keyed by language, then by real filename. An earlier version stored one
+    # templated entry per pattern and filled it from Hindi, which gave every
+    # other language Hindi's checksum: sizes are identical across languages, so
+    # only the hash caught it, and only once hashing was switched on.
+    per_lang: dict[str, dict] = {}
     for pattern in PER_LANGUAGE:
-        sample = pattern.replace("{lang}", "hi")
-        for name in expand(src, [sample]):
-            key = name.replace("_hi.onnx", "_{lang}.onnx")
-            p = src / name
-            per_lang[key] = {"size": p.stat().st_size,
-                             "sha256": None if args.no_hash else sha256(p)}
+        for path in sorted(src.glob(pattern.replace("{lang}", "*"))):
+            stem = path.name.split(".onnx")[0]
+            lang = stem.rsplit("_", 1)[-1]
+            entry = {"size": path.stat().st_size,
+                     "sha256": None if args.no_hash else sha256(path)}
+            per_lang.setdefault(lang, {})[path.name] = entry
+            data = path.with_name(path.name + ".data")
+            if data.exists():
+                per_lang[lang][data.name] = {
+                    "size": data.stat().st_size,
+                    "sha256": None if args.no_hash else sha256(data)}
 
     manifest = {
         "version": args.version,
@@ -88,6 +137,8 @@ def main() -> int:
                      "rnnt": [n for n in rnnt if n in shared]},
     }
 
+    verify(manifest, src)
+
     out = pathlib.Path(args.out) if args.out else src / "manifest.json"
     out.write_text(json.dumps(manifest, indent=2))
 
@@ -96,8 +147,12 @@ def main() -> int:
 
     print(f"wrote {out}")
     print(f"  ctc  profile: {total(manifest['profiles']['ctc'])/1e6:8.1f} MB")
+    per_language_bytes = max(
+        (sum(e["size"] for e in files.values()) for files in per_lang.values()),
+        default=0)
     print(f"  rnnt profile: {total(manifest['profiles']['rnnt'])/1e6:8.1f} MB"
-          f"  + {sum(e['size'] for e in per_lang.values())/1e6:.2f} MB per language")
+          f"  + {per_language_bytes/1e6:.2f} MB per language"
+          f"  ({len(per_lang)} languages)")
     if args.no_hash:
         print("  (checksums skipped - rerun without --no-hash before shipping)")
     return 0

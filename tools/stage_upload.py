@@ -9,9 +9,7 @@ instant and costs no extra disk.
     python tools/stage_upload.py --src models/int8_nc
 """
 import argparse
-import glob
 import json
-import os
 import pathlib
 import shutil
 import subprocess
@@ -36,9 +34,9 @@ def main() -> int:
               "without --no-hash before shipping", file=sys.stderr)
 
     needed = set(m["profiles"]["ctc"]) | set(m["profiles"]["rnnt"]) | {"manifest.json"}
-    for pattern in m["perLanguage"]:
-        needed |= {os.path.basename(f)
-                   for f in glob.glob(str(src / pattern.replace("{lang}", "*")))}
+    # perLanguage is keyed by language code, each holding that language's files.
+    for files in m["perLanguage"].values():
+        needed |= set(files)
 
     if out.exists():
         shutil.rmtree(out)
