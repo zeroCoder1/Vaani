@@ -76,6 +76,76 @@ let result = try asr.transcribe(mic.stop())
 
 That needs `NSMicrophoneUsageDescription` in your Info.plist.
 
+## Decoders
+
+Both decoders turn a sequence of audio frames into text. The encoder emits one
+frame per 80 ms, so a 9-second clip is 115 frames while the transcript might be
+40 characters — neither decoder is told which frame produced which character,
+and they resolve that differently.
+
+`.ctc` is the default. Use `.rnnt` only if you have measured it winning on
+your audio.
+
+```swift
+let asr = try SpeechRecognizer(modelsAt: directory,
+                               language: .hindi,
+                               decoders: [.ctc, .rnnt])
+let quick = try asr.transcribe(samples, using: .ctc)
+let careful = try asr.transcribe(samples, using: .rnnt)
+```
+
+Loading both shares the one encoder rather than paying for it twice.
+
+### CTC
+
+Connectionist Temporal Classification predicts a token at *every* frame, plus
+a special blank, then collapses the result:
+
+```
+frames:           h  h  _  e  _  l  l  _  l  o     (_ = blank)
+collapse repeats: h     _  e  _  l     _  l  o
+drop blanks:      h        e     l        l  o     -> "hello"
+```
+
+The blank is what makes double letters possible. Without one between the two
+`l`s, collapsing repeats would merge them.
+
+The property that matters: **each frame is predicted independently** given the
+audio. There is no mechanism for "having just emitted q, u is likely next", so
+it is purely acoustic. Decoding is an argmax per frame and some array work,
+which is why it is fast.
+
+### RNNT
+
+The transducer adds two pieces so that output tokens can depend on each other:
+
+- a **prediction network** — here a 2-layer LSTM, hidden size 640 — which sees
+  the tokens emitted so far, effectively a small built-in language model
+- a **joint network** combining what the audio says at frame *t* with what has
+  been written so far
+
+Decoding becomes a loop: at each frame, emit tokens until the model emits
+blank, then advance. `maxSymbolsPerFrame` caps that at 10 so a model that
+never emits blank cannot spin forever.
+
+That loop is why the search lives in Swift rather than in the graph. ONNX
+cannot express it, so the runtime is invoked once per emitted symbol instead
+of once per clip.
+
+### Which to use
+
+| | CTC | RNNT |
+| --- | --- | --- |
+| real-time factor (Mac) | ~0.04 | ~0.11–0.27 |
+| extra download | — | 42 MB, plus 0.17 MB per language |
+| WER on `hi_0.wav` | 0.042 | 0.083 |
+
+Transducers usually win on accuracy because of that built-in language
+modelling. On the single clip measured here CTC came out ahead, but one
+9-second sample is not evidence — run both across a real set before choosing.
+CTC is the default mainly for the 3–6x speed difference, which is far more
+noticeable on a phone than on a desktop.
+
 ## Shipping this in your own app
 
 The demo defaults to `http://localhost:8000` and carries two local-network

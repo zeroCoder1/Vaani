@@ -40,10 +40,24 @@ language costs about 0.17 MB rather than another 900 MB.
 
 ### Choosing a decoder
 
-``SpeechRecognizer/Decoder/ctc`` is the default and is what you want unless
-you have a reason otherwise. ``SpeechRecognizer/Decoder/rnnt`` can be
-slightly more accurate on some audio but runs a search step per symbol, so
-it is several times slower.
+The encoder emits one frame per 80 ms, and neither decoder is told which
+frame produced which character. They resolve that differently.
+
+``SpeechRecognizer/Decoder/ctc`` predicts a token at every frame plus a
+blank, then collapses repeats and drops blanks. Each frame is predicted
+independently of the others, so it is purely acoustic with no sense of which
+token tends to follow which. Decoding is an argmax per frame, which is why it
+is fast.
+
+``SpeechRecognizer/Decoder/rnnt`` adds a prediction network — a 2-layer LSTM
+that sees the tokens emitted so far, effectively a small language model — and
+a joint network combining it with the encoder output. Decoding becomes a loop
+that emits tokens until it emits blank, so the runtime is invoked once per
+symbol rather than once per clip. That usually buys accuracy and always costs
+speed: roughly 3 to 6 times slower, plus 42 MB of graphs.
+
+CTC is the default. Reach for the transducer only once you have measured it
+winning on your own audio.
 
 Loading both shares the one encoder rather than paying for it twice:
 
