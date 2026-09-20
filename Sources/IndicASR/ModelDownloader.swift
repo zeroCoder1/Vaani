@@ -24,11 +24,18 @@ public actor ModelDownloader {
 
     public struct Progress: Sendable {
         public let file: String
+        /// Zero-based index of this file within the current download.
         public let fileIndex: Int
+        /// How many files this download covers in total.
         public let fileCount: Int
+        /// Bytes written so far for this file.
         public let bytesReceived: Int64
+        /// Expected size of this file, from the manifest or the response.
         public let bytesExpected: Int64
 
+        /// Progress through the current file, 0 to 1. This is per file, not
+        /// across the whole download; the encoder dominates by size, so
+        /// weight by `bytesExpected` for an overall figure.
         public var fraction: Double {
             bytesExpected > 0 ? Double(bytesReceived) / Double(bytesExpected) : 0
         }
@@ -47,6 +54,8 @@ public actor ModelDownloader {
         let profiles: [String: [String]]
     }
 
+    /// Where model files are cached. Pass this to
+    /// ``SpeechRecognizer/init(modelsAt:language:decoders:threads:)``.
     public let directory: URL
 
     private let source: URL

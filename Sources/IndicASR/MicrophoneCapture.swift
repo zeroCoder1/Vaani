@@ -32,18 +32,25 @@ public final class MicrophoneCapture: @unchecked Sendable {
     private var samples: [Float] = []
     private var tapInstalled = false
 
+    /// Creates a recorder. No audio session is touched until ``start()``.
     public init() {}
 
     deinit {
         if tapInstalled { engine.inputNode.removeTap(onBus: 0) }
     }
 
+    /// Whether the engine is currently capturing.
     public var isRecording: Bool { engine.isRunning }
 
+    /// Seconds of audio captured so far. Safe to poll while recording.
     public var recordedDuration: TimeInterval {
         lock.withLock { Double(samples.count) / AudioFile.sampleRate }
     }
 
+    /// Asks for microphone access, returning the granted state.
+    ///
+    /// Requires `NSMicrophoneUsageDescription` in your Info.plist; without it
+    /// the app is terminated rather than shown a prompt.
     public func requestPermission() async -> Bool {
         await withCheckedContinuation { continuation in
             if #available(iOS 17.0, *) {

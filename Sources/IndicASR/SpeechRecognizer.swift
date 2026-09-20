@@ -38,19 +38,33 @@ public final class SpeechRecognizer: @unchecked Sendable {
         public var id: String { rawValue }
     }
 
+    /// The result of one transcription, with the timings needed to judge
+    /// whether it kept up with the audio.
     public struct Transcription: Sendable {
+        /// Recognised text, already detokenized.
         public let text: String
+        /// The language the audio was decoded as.
         public let language: Language
+        /// Which decoder produced this text.
         public let decoder: Decoder
+        /// Length of the audio in seconds.
         public let audioDuration: TimeInterval
+        /// Wall-clock seconds spent encoding and decoding.
         public let processingTime: TimeInterval
 
+        /// Processing time divided by audio duration. Below 1 means faster
+        /// than real time, so a live stream would keep up.
         public var realTimeFactor: Double {
             audioDuration > 0 ? processingTime / audioDuration : 0
         }
     }
 
+    /// The language this instance decodes. Fixed at initialization, because
+    /// the output head and token table are language-specific.
     public let language: Language
+
+    /// Decoders loaded by this instance. Passing an unloaded decoder to
+    /// ``transcribe(_:using:)`` throws rather than silently substituting.
     public let decoders: Set<Decoder>
 
     private static let encoderDimension = 1024

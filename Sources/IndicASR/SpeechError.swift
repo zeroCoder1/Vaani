@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Errors thrown by ``SpeechRecognizer``, ``ModelDownloader`` and ``AudioFile``.
 public enum SpeechError: LocalizedError {
     case missingModelFile(String)
     case unsupportedLanguage(String)
@@ -17,6 +18,7 @@ public enum SpeechError: LocalizedError {
     case downloadFailed(String)
     case checksumMismatch(file: String)
 
+    /// A message suitable for showing to a person.
     public var errorDescription: String? {
         switch self {
         case .missingModelFile(let name):

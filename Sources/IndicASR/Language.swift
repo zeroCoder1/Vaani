@@ -19,6 +19,7 @@ public enum Language: String, CaseIterable, Sendable, Codable, Identifiable {
     case sanskrit = "sa", santali = "sat", sindhi = "sd", tamil = "ta"
     case telugu = "te", urdu = "ur"
 
+    /// Stable identity for SwiftUI lists and pickers.
     public var id: String { rawValue }
 
     /// ISO 639 code, as used in the model's filenames and asset keys.
