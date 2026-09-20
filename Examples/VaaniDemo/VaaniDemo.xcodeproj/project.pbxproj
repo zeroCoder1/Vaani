@@ -27,6 +27,7 @@
 		58098601FE9968FD4219534C /* hi_12.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0F1F7EFA2CE12041F3D79314 /* hi_12.wav */; };
 		5E0BE35B2486DB1FF2029CB0 /* hi_9.wav in Resources */ = {isa = PBXBuildFile; fileRef = D7255BD13300974B4EF36C4B /* hi_9.wav */; };
 		72A47ACA10A3E117B4A0374C /* hi_16.wav in Resources */ = {isa = PBXBuildFile; fileRef = C95AFE1F605299F3D82782F9 /* hi_16.wav */; };
+		75FBCAB6DFA8DCC01DF964BA /* VoiceActivityDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02521ECFE59FA861F7E6648C /* VoiceActivityDetector.swift */; };
 		7C29A5E71C13ECAEF5BD4F16 /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5295073B9310097CF962DD3E /* SpeechRecognizer.swift */; };
 		7F3EEB22B8820F87E083F793 /* hi_2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6131F7B8F869CC6DF500E4DC /* hi_2.wav */; };
 		806252E734A31625CB9E6CA6 /* hi_18.wav in Resources */ = {isa = PBXBuildFile; fileRef = B0B598A75133634BA904A09B /* hi_18.wav */; };
@@ -34,6 +35,7 @@
 		93D1EAD21E4630C17098CFB4 /* benchmark.json in Resources */ = {isa = PBXBuildFile; fileRef = C13266E7B376EA781E06C588 /* benchmark.json */; };
 		943559D914BC6CB2AD897AAA /* MelSpectrogram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DC2D8D089E434F5B87D736 /* MelSpectrogram.swift */; };
 		962EE06C6D433B571816F68C /* ModelDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF82F57234D445020F937CB8 /* ModelDownloader.swift */; };
+		96BEF7C08173728A555A71F8 /* LiveTranscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1895AE0B75EFB5970A2598C7 /* LiveTranscriber.swift */; };
 		9AEEBD063EE33D0A5D952B45 /* AudioFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33056C6EDFDCA176620CF453 /* AudioFile.swift */; };
 		B1C015EAE6B07426E54D8F2F /* hi_1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5F37D804DFF7C724E4C8462E /* hi_1.wav */; };
 		BCAC7CEF4DBC966517C1BBEA /* Vaani.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2EEEA25D9AA29A2A4FA18392 /* Vaani.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -49,6 +51,7 @@
 		E82031B29210F49DE0C60122 /* hi_11.wav in Resources */ = {isa = PBXBuildFile; fileRef = 740690F1CB19601C4B8FD401 /* hi_11.wav */; };
 		EA50D801C6AED1B3CA2A86C8 /* hi_4.wav in Resources */ = {isa = PBXBuildFile; fileRef = D2F9AD09E4D2ACB7D188D94E /* hi_4.wav */; };
 		EE67868D5FE6A615025BF396 /* hi_17.wav in Resources */ = {isa = PBXBuildFile; fileRef = BE7DC80152416A62E9A6FB22 /* hi_17.wav */; };
+		F08775CE355FF97A4F1EBC46 /* SpeechSegmenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F4DACF9C5E6792B8766EBE /* SpeechSegmenter.swift */; };
 		F0F940B7995C3AA4A4009BFF /* hi_5.wav in Resources */ = {isa = PBXBuildFile; fileRef = C45C6085ED551815E5774D84 /* hi_5.wav */; };
 		F642E0B536EFE8500AD9612B /* ONNX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B039817FBD6AA94D09E8CAC /* ONNX.swift */; };
 		F89EF90B9F581BCF112C520C /* hi_7.wav in Resources */ = {isa = PBXBuildFile; fileRef = 51D88002EB01F748D98C81EF /* hi_7.wav */; };
@@ -79,10 +82,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		02521ECFE59FA861F7E6648C /* VoiceActivityDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceActivityDetector.swift; sourceTree = "<group>"; };
 		050296AC243510D29E49DD1D /* hi_6.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hi_6.wav; sourceTree = "<group>"; };
 		05DC2D8D089E434F5B87D736 /* MelSpectrogram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MelSpectrogram.swift; sourceTree = "<group>"; };
 		0F1F7EFA2CE12041F3D79314 /* hi_12.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hi_12.wav; sourceTree = "<group>"; };
 		10674AD0460C48F123FE298E /* Sample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sample.swift; sourceTree = "<group>"; };
+		1895AE0B75EFB5970A2598C7 /* LiveTranscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTranscriber.swift; sourceTree = "<group>"; };
 		2795F2F46EA627F4EF0D660E /* hi_8.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hi_8.wav; sourceTree = "<group>"; };
 		2EB8FCBFFF5129858A323F9F /* Benchmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Benchmark.swift; sourceTree = "<group>"; };
 		2EEEA25D9AA29A2A4FA18392 /* Vaani.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Vaani.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,6 +103,7 @@
 		6D9E9ABBE5EDE5819A509983 /* samples.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = samples.json; sourceTree = "<group>"; };
 		7096F433030FE1CC4AD4800F /* VaaniDemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaaniDemoApp.swift; sourceTree = "<group>"; };
 		740690F1CB19601C4B8FD401 /* hi_11.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hi_11.wav; sourceTree = "<group>"; };
+		74F4DACF9C5E6792B8766EBE /* SpeechSegmenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechSegmenter.swift; sourceTree = "<group>"; };
 		7EF759E5F5B4CF7A3C89C83F /* MicrophoneCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrophoneCapture.swift; sourceTree = "<group>"; };
 		86871A56EF071FA28A45DE3A /* hi_19.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hi_19.wav; sourceTree = "<group>"; };
 		8B649AB7484B02C1CFDF252C /* hi_13.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hi_13.wav; sourceTree = "<group>"; };
@@ -162,6 +168,7 @@
 			children = (
 				05DC2D8D089E434F5B87D736 /* MelSpectrogram.swift */,
 				3B039817FBD6AA94D09E8CAC /* ONNX.swift */,
+				74F4DACF9C5E6792B8766EBE /* SpeechSegmenter.swift */,
 				A1F6B8AC4AD28BBB4B1BC410 /* Vocabulary.swift */,
 			);
 			path = Internal;
@@ -185,7 +192,6 @@
 				6D9E9ABBE5EDE5819A509983 /* samples.json */,
 				E34AC47E6C10C5E56A90D52A /* Benchmark */,
 			);
-			name = Fixtures;
 			path = Fixtures;
 			sourceTree = "<group>";
 		};
@@ -253,10 +259,12 @@
 				33056C6EDFDCA176620CF453 /* AudioFile.swift */,
 				D3C8B3E90BCF99EFA2D8737D /* Documentation.docc */,
 				FC2D63E7C112C4022A76FF76 /* Language.swift */,
+				1895AE0B75EFB5970A2598C7 /* LiveTranscriber.swift */,
 				7EF759E5F5B4CF7A3C89C83F /* MicrophoneCapture.swift */,
 				AF82F57234D445020F937CB8 /* ModelDownloader.swift */,
 				C455AFBB812E6C57102BCDB5 /* SpeechError.swift */,
 				5295073B9310097CF962DD3E /* SpeechRecognizer.swift */,
+				02521ECFE59FA861F7E6648C /* VoiceActivityDetector.swift */,
 				48DBDE717642CBD40DD89819 /* Internal */,
 			);
 			path = Vaani;
@@ -315,11 +323,11 @@
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					1435CF43E084E4831BD16206 = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = 7CSFZ8JM6F;
 						ProvisioningStyle = Automatic;
 					};
 					E544857F1CABF597F2C541CE = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = 7CSFZ8JM6F;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -404,13 +412,16 @@
 				9AEEBD063EE33D0A5D952B45 /* AudioFile.swift in Sources */,
 				E08B21E1150AC5DD94A444C3 /* Documentation.docc in Sources */,
 				18158A4723E413DB60C6E46F /* Language.swift in Sources */,
+				96BEF7C08173728A555A71F8 /* LiveTranscriber.swift in Sources */,
 				943559D914BC6CB2AD897AAA /* MelSpectrogram.swift in Sources */,
 				3A4DC0BD6620E0EA870E02DD /* MicrophoneCapture.swift in Sources */,
 				962EE06C6D433B571816F68C /* ModelDownloader.swift in Sources */,
 				F642E0B536EFE8500AD9612B /* ONNX.swift in Sources */,
 				03F150DFCD1A41A15E81ECFE /* SpeechError.swift in Sources */,
 				7C29A5E71C13ECAEF5BD4F16 /* SpeechRecognizer.swift in Sources */,
+				F08775CE355FF97A4F1EBC46 /* SpeechSegmenter.swift in Sources */,
 				5562C5DDC4E4949C95E26834 /* Vocabulary.swift in Sources */,
+				75FBCAB6DFA8DCC01DF964BA /* VoiceActivityDetector.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,7 +443,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 7CSFZ8JM6F;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -460,7 +471,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 7CSFZ8JM6F;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Vaani;
@@ -488,7 +499,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 7CSFZ8JM6F;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -516,7 +527,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 7CSFZ8JM6F;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Vaani;

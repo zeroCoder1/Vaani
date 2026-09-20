@@ -18,6 +18,7 @@ struct ContentView: View {
             List {
                 modelSection
                 inputSection
+                liveSection
                 benchmarkSection
                 if !model.outcomes.isEmpty { resultsSection }
                 settingsSection
@@ -117,6 +118,51 @@ struct ContentView: View {
                     .foregroundStyle(model.isRecording ? .red : .accentColor)
             }
             .disabled(model.isBusy && !model.isRecording)
+        }
+    }
+
+    private var liveSection: some View {
+        Section("Live") {
+            Button {
+                Task { await model.toggleLive() }
+            } label: {
+                Label(model.isLive ? "Stop listening" : "Start live transcription",
+                      systemImage: model.isLive ? "stop.circle.fill" : "waveform.badge.mic")
+                    .foregroundStyle(model.isLive ? .red : .accentColor)
+            }
+            .disabled(model.isBusy && !model.isLive)
+
+            if model.isLive {
+                HStack(spacing: 8) {
+                    Circle()
+                        .fill(model.liveStatus == "Speaking" ? .green : .secondary)
+                        .frame(width: 8, height: 8)
+                    Text(model.liveStatus).font(.caption).foregroundStyle(.secondary)
+                }
+            }
+
+            if !model.liveTranscript.isEmpty
+                || !model.liveStable.isEmpty || !model.livePartial.isEmpty {
+                VStack(alignment: .leading, spacing: 6) {
+                    if !model.liveTranscript.isEmpty {
+                        Text(model.liveTranscript).textSelection(.enabled)
+                    }
+                    // Settled words in full colour, the draft tail dimmed, so
+                    // it is obvious which part may still change.
+                    if !model.liveStable.isEmpty || !model.livePartial.isEmpty {
+                        // foregroundColor, not foregroundStyle: the latter is
+                        // iOS 17+ and this target is 16.
+                        (Text(model.liveStable).foregroundColor(.primary)
+                         + Text(model.liveStable.isEmpty ? "" : " ")
+                         + Text(model.livePartial).foregroundColor(.secondary))
+                    }
+                }
+                .padding(.vertical, 2)
+            }
+
+            Toggle("Provisional results", isOn: $model.livePartialsEnabled)
+                .font(.caption)
+                .disabled(model.isLive)
         }
     }
 

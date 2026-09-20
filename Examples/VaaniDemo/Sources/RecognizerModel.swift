@@ -38,6 +38,12 @@ final class RecognizerModel: ObservableObject {
     @Published private(set) var cachedBytes: Int64 = 0
     @Published private(set) var benchmarkRuns: [BenchmarkRun] = []
     @Published private(set) var benchmarkProgress: String?
+    @Published private(set) var isLive = false
+    @Published private(set) var liveTranscript = ""
+    @Published private(set) var livePartial = ""
+    @Published private(set) var liveStable = ""
+    @Published private(set) var liveStatus = ""
+    @Published var livePartialsEnabled = false
 
     @Published var language: Language = .hindi { didSet { invalidate(oldValue != language) } }
     @Published var decoder: SpeechRecognizer.Decoder = .ctc {
@@ -54,6 +60,8 @@ final class RecognizerModel: ObservableObject {
     private var recognizer: SpeechRecognizer?
     private var loaded: (Language, SpeechRecognizer.Decoder)?
     private let microphone = MicrophoneCapture()
+    private var live: LiveTranscriber?
+    private var liveTask: Task<Void, Never>?
 
     /// Where the cached files came from. Side-loading with
     /// `tools/dev.sh push-model` leaves no download record, and it is otherwise
@@ -144,6 +152,72 @@ final class RecognizerModel: ObservableObject {
         }
         cachedBytes = 0
         outcomes.removeAll()
+    }
+
+    /// Start or stop continuous transcription.
+    func toggleLive() async {
+        if isLive {
+            await live?.stop()
+            await liveTask?.value
+            live = nil
+            liveTask = nil
+            isLive = false
+            liveStatus = ""
+            livePartial = ""
+            liveStable = ""
+            return
+        }
+
+        if recognizer == nil { await load() }
+        guard let recognizer else { return }
+
+        var configuration = LiveTranscriber.Configuration()
+        configuration.partialInterval = livePartialsEnabled ? 1.5 : 0
+        let transcriber = LiveTranscriber(recognizer: recognizer,
+                                          configuration: configuration)
+
+        guard await transcriber.requestPermission() else {
+            state = .failed("Microphone access was denied")
+            return
+        }
+
+        do {
+            let updates = try await transcriber.start()
+            live = transcriber
+            isLive = true
+            liveTranscript = ""
+            livePartial = ""
+            liveStable = ""
+            liveStatus = "Listening"
+
+            liveTask = Task { [weak self] in
+                for await update in updates {
+                    guard let self else { return }
+                    switch update {
+                    case .speechStarted:
+                        self.liveStatus = "Speaking"
+                    case .speechEnded:
+                        self.liveStatus = "Listening"
+                        self.livePartial = ""
+                        self.liveStable = ""
+                    case .partial(let partial):
+                        self.liveStable = partial.stablePrefix
+                        self.livePartial = String(partial.text
+                            .dropFirst(partial.stablePrefix.count))
+                            .trimmingCharacters(in: .whitespaces)
+                    case .final(let result):
+                        self.liveTranscript += (self.liveTranscript.isEmpty ? "" : " ")
+                            + result.text
+                        self.livePartial = ""
+                        self.liveStable = ""
+                    case .failed(let message):
+                        self.liveStatus = "Failed: \(message)"
+                    }
+                }
+            }
+        } catch {
+            state = .failed(error.localizedDescription)
+        }
     }
 
     /// Runs every bundled clip through both decoders and summarises the result.
