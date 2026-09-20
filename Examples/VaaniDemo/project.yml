@@ -60,6 +60,13 @@ targets:
         buildPhase: resources
         name: Fixtures
         includes: ["*.wav", "samples.json"]
+      # Benchmark audio is not committed; run tools/fetch_benchmark_clips.py.
+      # optional so the demo still builds without it.
+      - path: ../../Fixtures/benchmark
+        buildPhase: resources
+        name: Benchmark
+        optional: true
+        includes: ["*.wav", "benchmark.json"]
     dependencies:
       - target: Vaani
     settings:

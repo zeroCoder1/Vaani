@@ -90,3 +90,7 @@ samples/
 
 # Xcode sometimes leaves numbered duplicates behind
 *[0-9].plist
+
+# Benchmark audio: 10MB, regenerable with tools/fetch_benchmark_clips.py.
+# SwiftPM clones this repo for every consumer, so it stays out.
+Fixtures/benchmark/

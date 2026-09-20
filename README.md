@@ -158,12 +158,24 @@ desktop, so an A17 Pro transcribes 318 seconds of audio in 16 — roughly 20
 times faster than real time. And the transducer's per-symbol loop costs less
 than it looks: 1.3x, not the several-fold penalty its structure suggests.
 
-To reproduce the desktop column on your own clips:
+To reproduce these. The desktop column:
 
 ```bash
 .venv/bin/python tools/run_reference.py --model models/int8_nc --lang hi \
     --decoding both --limit 25
 ```
+
+The device column, from the demo app's Benchmark section:
+
+```bash
+.venv/bin/python tools/fetch_benchmark_clips.py   # 25 FLEURS clips, ~10 MB
+tools/dev.sh run
+```
+
+The clips are not committed. SwiftPM clones this repository for every consumer,
+and 10 MB of benchmark audio is not something a dependent app should pay for.
+Without them the demo still builds and the Benchmark section says so rather
+than quietly measuring the three sample clips instead.
 
 ## Shipping this in your own app
 

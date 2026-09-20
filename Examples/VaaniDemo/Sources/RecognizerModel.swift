@@ -36,6 +36,8 @@ final class RecognizerModel: ObservableObject {
     @Published private(set) var outcomes: [Outcome] = []
     @Published private(set) var isRecording = false
     @Published private(set) var cachedBytes: Int64 = 0
+    @Published private(set) var benchmarkRuns: [BenchmarkRun] = []
+    @Published private(set) var benchmarkProgress: String?
 
     @Published var language: Language = .hindi { didSet { invalidate(oldValue != language) } }
     @Published var decoder: SpeechRecognizer.Decoder = .ctc {
@@ -142,6 +144,67 @@ final class RecognizerModel: ObservableObject {
         }
         cachedBytes = 0
         outcomes.removeAll()
+    }
+
+    /// Runs every bundled clip through both decoders and summarises the result.
+    ///
+    /// Loads its own recognizer with both decoders so the encoder is shared
+    /// rather than paid for twice, and so the benchmark does not disturb
+    /// whatever the main UI already has loaded.
+    func runBenchmark() async {
+        guard let base = URL(string: source) else {
+            state = .failed("Invalid model URL"); return
+        }
+        let clips = Benchmark.clips
+        guard !clips.isEmpty else {
+            state = .failed("No benchmark clips bundled"); return
+        }
+        benchmarkRuns = []
+
+        do {
+            benchmarkProgress = "Fetching model"
+            let downloader = try ModelDownloader(source: base)
+            let directory = try await downloader.fetch(
+                language: language, decoders: [.ctc, .rnnt]
+            ) { [weak self] p in
+                Task { @MainActor in
+                    self?.benchmarkProgress =
+                        "Downloading \(p.file) \(Int(p.fraction * 100))%"
+                }
+            }
+
+            benchmarkProgress = "Loading both decoders"
+            let lang = language
+            let engine = try await Task.detached(priority: .userInitiated) {
+                try SpeechRecognizer(modelsAt: directory, language: lang,
+                                     decoders: [.ctc, .rnnt])
+            }.value
+
+            let total = clips.count * 2
+            var done = 0
+            for decoder in [SpeechRecognizer.Decoder.ctc, .rnnt] {
+                var rows: [(audio: Double, processing: Double, wer: Double)] = []
+                for clip in clips {
+                    guard let url = clip.url else { continue }
+                    done += 1
+                    benchmarkProgress =
+                        "\(decoder.rawValue.uppercased()) \(done)/\(total) — \(clip.file)"
+                    let result = try await Task.detached(priority: .userInitiated) {
+                        try engine.transcribe(contentsOf: url, using: decoder)
+                    }.value
+                    rows.append((clip.durationS,
+                                 result.processingTime,
+                                 errorRate(reference: clip.reference,
+                                           hypothesis: result.text)))
+                }
+                benchmarkRuns.append(Benchmark.summarise(decoder: decoder, results: rows))
+            }
+            benchmarkProgress = nil
+            state = .ready
+        } catch {
+            benchmarkProgress = nil
+            state = .failed(error.localizedDescription)
+        }
     }
 
     func transcribe(_ sample: Sample) async {

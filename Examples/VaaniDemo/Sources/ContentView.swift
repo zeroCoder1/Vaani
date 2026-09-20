@@ -18,6 +18,7 @@ struct ContentView: View {
             List {
                 modelSection
                 inputSection
+                benchmarkSection
                 if !model.outcomes.isEmpty { resultsSection }
                 settingsSection
             }
@@ -116,6 +117,70 @@ struct ContentView: View {
                     .foregroundStyle(model.isRecording ? .red : .accentColor)
             }
             .disabled(model.isBusy && !model.isRecording)
+        }
+    }
+
+    private var benchmarkSection: some View {
+        Section("Benchmark") {
+            if let progress = model.benchmarkProgress {
+                HStack(spacing: 10) {
+                    ProgressView()
+                    Text(progress).font(.caption).foregroundStyle(.secondary)
+                }
+            } else if Benchmark.clips.isEmpty {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("No benchmark clips bundled").font(.subheadline)
+                    Text("Run tools/fetch_benchmark_clips.py, then rebuild.")
+                        .font(.caption2).foregroundStyle(.secondary)
+                }
+            } else {
+                Button {
+                    Task { await model.runBenchmark() }
+                } label: {
+                    Label("Run \(Benchmark.clips.count) clips x 2 decoders",
+                          systemImage: "gauge.with.dots.needle.67percent")
+                }
+                .disabled(model.isBusy)
+            }
+
+            if !model.benchmarkRuns.isEmpty {
+                VStack(spacing: 10) {
+                    HStack {
+                        Text("").frame(width: 54, alignment: .leading)
+                        Text("WER").frame(maxWidth: .infinity, alignment: .trailing)
+                        Text("median").frame(maxWidth: .infinity, alignment: .trailing)
+                        Text("RTF").frame(maxWidth: .infinity, alignment: .trailing)
+                        Text("time").frame(maxWidth: .infinity, alignment: .trailing)
+                    }
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(.secondary)
+
+                    ForEach(model.benchmarkRuns) { run in
+                        HStack {
+                            Text(run.decoder.rawValue.uppercased())
+                                .font(.caption.weight(.semibold))
+                                .frame(width: 54, alignment: .leading)
+                            Text(String(format: "%.1f%%", run.meanWER * 100))
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                            Text(String(format: "%.1f%%", run.medianWER * 100))
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                            Text(String(format: "%.3f", run.realTimeFactor))
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                            Text(String(format: "%.0fs", run.processingSeconds))
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                        }
+                        .font(.caption.monospacedDigit())
+                    }
+
+                    if let first = model.benchmarkRuns.first {
+                        Text("\(first.clips) clips, \(Int(first.audioSeconds))s of \(model.language.name) audio")
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+                .padding(.vertical, 4)
+            }
         }
     }
 
