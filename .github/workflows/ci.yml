@@ -40,7 +40,7 @@ jobs:
       - name: Build
         run: |
           xcodebuild build \
-            -scheme IndicASR \
+            -scheme Vaani \
             -destination 'generic/platform=iOS' \
             CODE_SIGNING_ALLOWED=NO
 
@@ -56,6 +56,6 @@ jobs:
       - name: DocC
         run: |
           xcodebuild docbuild \
-            -scheme IndicASR \
+            -scheme Vaani \
             -destination 'generic/platform=iOS' \
             CODE_SIGNING_ALLOWED=NO

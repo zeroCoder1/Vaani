@@ -37,5 +37,5 @@ float. Measured on 25 FLEURS Hindi clips, that is 952 MB at 0.1056 WER
 against 0.1034 for fp32 at 2556 MB. Including Conv saves a further 245 MB
 but costs 3.5 points of WER.
 
-[Unreleased]: https://github.com/zeroCoder1/Indic-languages/compare/1.0.0...HEAD
-[1.0.0]: https://github.com/zeroCoder1/Indic-languages/releases/tag/1.0.0
+[Unreleased]: https://github.com/zeroCoder1/Vaani/compare/1.0.0...HEAD
+[1.0.0]: https://github.com/zeroCoder1/Vaani/releases/tag/1.0.0

@@ -1,7 +1,7 @@
 // swift-tools-version: 5.9
 //
 //  Package.swift
-//  IndicASR
+//  Vaani
 //
 //  Created by Shrutesh Sharma on 20/09/2026.
 //
@@ -10,10 +10,10 @@ import PackageDescription
 import class Foundation.ProcessInfo
 
 let package = Package(
-    name: "IndicASR",
+    name: "Vaani",
     platforms: [.iOS(.v16), .macOS(.v14)],
     products: [
-        .library(name: "IndicASR", targets: ["IndicASR"])
+        .library(name: "Vaani", targets: ["Vaani"])
     ],
     dependencies: [
         .package(url: "https://github.com/microsoft/onnxruntime-swift-package-manager",
@@ -21,7 +21,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "IndicASR",
+            name: "Vaani",
             dependencies: [
                 .product(name: "onnxruntime",
                          package: "onnxruntime-swift-package-manager")
@@ -29,17 +29,17 @@ let package = Package(
         ),
         // Fixtures live in Fixtures/ at the repo root and are read from disk
         // rather than bundled, so the demo app and the tests share one copy.
-        .testTarget(name: "IndicASRTests", dependencies: ["IndicASR"]),
+        .testTarget(name: "VaaniTests", dependencies: ["Vaani"]),
     ]
 )
 
 // The DocC plugin is only needed to render documentation locally, so it is
 // added on demand rather than making every consumer resolve it:
 //
-//     INDICASR_DOCS=1 swift package generate-documentation --target IndicASR
+//     VAANI_DOCS=1 swift package generate-documentation --target Vaani
 //
 // Swift Package Index builds the docs from .spi.yml without it.
-if ProcessInfo.processInfo.environment["INDICASR_DOCS"] != nil {
+if ProcessInfo.processInfo.environment["VAANI_DOCS"] != nil {
     package.dependencies.append(
         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.3.0"))
 }

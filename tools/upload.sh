@@ -8,7 +8,7 @@
 #   tools/dev.sh stage
 #   tools/upload.sh <rclone-remote> <bucket> [public-base-url]
 #
-# e.g. tools/upload.sh r2 indicasr https://pub-xxxx.r2.dev
+# e.g. tools/upload.sh r2 vaani https://pub-xxxx.r2.dev
 set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

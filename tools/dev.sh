@@ -9,7 +9,7 @@
 set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SCRATCH="${INDICASR_SCRATCH:-${TMPDIR:-/tmp}/indicasr-build}"
+SCRATCH="${VAANI_SCRATCH:-${TMPDIR:-/tmp}/vaani-build}"
 DD="$SCRATCH/dd"
 mkdir -p "$SCRATCH" "$DD"
 
@@ -23,18 +23,18 @@ case "${1:-help}" in
     swift build -c "${2:-debug}" --scratch-path "$SCRATCH/spm"
     ;;
   app)
-    cd "$REPO/Examples/IndicASRDemo"
+    cd "$REPO/Examples/VaaniDemo"
     DEVELOPMENT_TEAM="${DEVELOPMENT_TEAM:-}" xcodegen generate
-    xcodebuild -project IndicASRDemo.xcodeproj -scheme IndicASRDemo \
+    xcodebuild -project VaaniDemo.xcodeproj -scheme VaaniDemo \
       -destination "platform=iOS Simulator,name=${SIM:-iPhone 17}" \
       -derivedDataPath "$DD" CODE_SIGNING_ALLOWED=NO build
     ;;
   run)
     "$0" app
-    APP="$(find "$DD/Build/Products" -name IndicASRDemo.app -maxdepth 3 | head -1)"
+    APP="$(find "$DD/Build/Products" -name VaaniDemo.app -maxdepth 3 | head -1)"
     xcrun simctl boot "${SIM:-iPhone 17}" 2>/dev/null || true
     xcrun simctl install "${SIM:-iPhone 17}" "$APP"
-    xcrun simctl launch "${SIM:-iPhone 17}" com.indicasr.demo
+    xcrun simctl launch "${SIM:-iPhone 17}" com.vaani.demo
     ;;
   xcode)
     # Reset Xcode state and open the ONE thing that is safe to open.
@@ -42,7 +42,7 @@ case "${1:-help}" in
     # The demo project references the repo root as a local Swift package. If
     # Xcode also has the repo root open as a Folder, it refuses to treat the
     # same directory as both and the package product fails to resolve
-    # ("Missing package product 'IndicASR'"). So: open the .xcodeproj, never
+    # ("Missing package product 'Vaani'"). So: open the .xcodeproj, never
     # the folder.
     if pgrep -x Xcode >/dev/null; then
       echo "Xcode is running. Quit it first (Cmd-Q, not just closing the window),"
@@ -50,11 +50,11 @@ case "${1:-help}" in
       exit 1
     fi
     rm -rf "$REPO/.swiftpm"
-    rm -rf "$REPO/Examples/IndicASRDemo/IndicASRDemo.xcodeproj/project.xcworkspace/xcshareddata/swiftpm"
-    rm -rf ~/Library/Developer/Xcode/DerivedData/IndicASRDemo-*
-    cd "$REPO/Examples/IndicASRDemo" && DEVELOPMENT_TEAM="${DEVELOPMENT_TEAM:-}" xcodegen generate >/dev/null
-    echo "reset. opening IndicASRDemo.xcodeproj"
-    open "$REPO/Examples/IndicASRDemo/IndicASRDemo.xcodeproj"
+    rm -rf "$REPO/Examples/VaaniDemo/VaaniDemo.xcodeproj/project.xcworkspace/xcshareddata/swiftpm"
+    rm -rf ~/Library/Developer/Xcode/DerivedData/VaaniDemo-*
+    cd "$REPO/Examples/VaaniDemo" && DEVELOPMENT_TEAM="${DEVELOPMENT_TEAM:-}" xcodegen generate >/dev/null
+    echo "reset. opening VaaniDemo.xcodeproj"
+    open "$REPO/Examples/VaaniDemo/VaaniDemo.xcodeproj"
     ;;
   push-model)
     # Side-load the model straight into the simulator app container, so the app
@@ -64,8 +64,8 @@ case "${1:-help}" in
     SRC="$REPO/models/${2:-int8_nc}"
     [ -f "$SRC/manifest.json" ] || { echo "no manifest.json in $SRC — run tools/make_manifest.py"; exit 1; }
     xcrun simctl boot "$SIMNAME" 2>/dev/null || true
-    CONTAINER="$(xcrun simctl get_app_container "$SIMNAME" com.indicasr.demo data)"       || { echo "app not installed — run tools/dev.sh run first"; exit 1; }
-    DEST="$CONTAINER/Library/Application Support/IndicASR"
+    CONTAINER="$(xcrun simctl get_app_container "$SIMNAME" com.vaani.demo data)"       || { echo "app not installed — run tools/dev.sh run first"; exit 1; }
+    DEST="$CONTAINER/Library/Application Support/Vaani"
     mkdir -p "$DEST"
     for f in "$SRC"/*; do
       cp -c "$f" "$DEST/" 2>/dev/null || cp "$f" "$DEST/"
@@ -77,7 +77,7 @@ case "${1:-help}" in
     # DocC is built for iOS: ONNX Runtime's Objective-C headers include C++
     # that clang cannot parse when extracting macOS symbol graphs.
     cd "$REPO"
-    xcodebuild docbuild -scheme IndicASR \
+    xcodebuild docbuild -scheme Vaani \
       -destination 'generic/platform=iOS' \
       -derivedDataPath "$DD" CODE_SIGNING_ALLOWED=NO | tail -3
     find "$DD" -name '*.doccarchive' | head -1

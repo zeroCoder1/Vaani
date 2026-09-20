@@ -87,3 +87,6 @@ models/
 # Scratch working set for tools/run_reference.py. Regenerable, and the three
 # clips the tests and demo actually use live in Fixtures/.
 samples/
+
+# Xcode sometimes leaves numbered duplicates behind
+*[0-9].plist

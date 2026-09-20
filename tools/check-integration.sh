@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build a throwaway app that consumes IndicASR the way a third party would.
+# Build a throwaway app that consumes Vaani the way a third party would.
 #
 # The demo app deliberately does NOT do this - it builds the library as its own
 # framework target, because an app nested inside the package it depends on
@@ -20,14 +20,14 @@ let package = Package(
     platforms: [.iOS(.v16), .macOS(.v14)],
     dependencies: [.package(path: "$REPO")],
     targets: [.executableTarget(name: "Consumer",
-                                dependencies: [.product(name: "IndicASR",
+                                dependencies: [.product(name: "Vaani",
                                                         package: "$(basename "$REPO")")])]
 )
 EOF
 
 cat > "$WORK/Sources/Consumer/main.swift" <<'EOF'
 import Foundation
-import IndicASR
+import Vaani
 
 let models = URL(fileURLWithPath: CommandLine.arguments[1])
 let audio = URL(fileURLWithPath: CommandLine.arguments[2])

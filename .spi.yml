@@ -9,4 +9,4 @@ builder:
   configs:
     - platform: ios
       documentation_targets:
-        - IndicASR
+        - Vaani

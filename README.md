@@ -1,4 +1,4 @@
-# IndicASR
+# Vaani
 
 [![Swift 5.9](https://img.shields.io/badge/Swift-5.9-orange.svg)](https://swift.org)
 [![Platforms](https://img.shields.io/badge/platforms-iOS%2016%20%7C%20macOS%2014-lightgrey.svg)](https://developer.apple.com)
@@ -19,17 +19,17 @@ Add the package in Xcode via **File → Add Package Dependencies**, or in a
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/zeroCoder1/Indic-languages", from: "1.0.0")
+    .package(url: "https://github.com/zeroCoder1/Vaani", from: "1.0.0")
 ],
 targets: [
     .target(name: "YourApp", dependencies: [
-        .product(name: "IndicASR", package: "Indic-languages")
+        .product(name: "Vaani", package: "Vaani")
     ])
 ]
 ```
 
-Note the two names: the product is `IndicASR`, but `package:` is the
-repository name, `Indic-languages`. Swift Package Manager derives the package
+Note the two names: the product is `Vaani`, but `package:` is the
+repository name, `Vaani`. Swift Package Manager derives the package
 identifier from the URL, not from the product.
 
 Requires iOS 16 / macOS 14. The only dependency is ONNX Runtime.
@@ -37,7 +37,7 @@ Requires iOS 16 / macOS 14. The only dependency is ONNX Runtime.
 ## Use
 
 ```swift
-import IndicASR
+import Vaani
 
 let asr = try SpeechRecognizer(modelsAt: modelDirectory, language: .hindi)
 let result = try asr.transcribe(contentsOf: audioURL)
@@ -51,7 +51,7 @@ To fetch the model on first launch instead of shipping it:
 
 ```swift
 let asr = try await SpeechRecognizer.downloading(
-    from: URL(string: "https://cdn.example.com/indicasr")!,
+    from: URL(string: "https://cdn.example.com/vaani")!,
     language: .hindi
 ) { progress in
     print("\(progress.file) \(Int(progress.fraction * 100))%")
@@ -87,7 +87,7 @@ For a real app:
 
 ```swift
 let asr = try await SpeechRecognizer.downloading(
-    from: URL(string: "https://cdn.yourcompany.com/indicasr")!,
+    from: URL(string: "https://cdn.yourcompany.com/vaani")!,
     language: .hindi
 )
 ```
@@ -146,7 +146,7 @@ The smaller build is there if you need the 245 MB back.
 
 ## Demo
 
-`Examples/IndicASRDemo` exercises the whole surface: all 22 languages, both
+`Examples/VaaniDemo` exercises the whole surface: all 22 languages, both
 decoders, bundled clips with ground-truth transcripts, an audio file picker, and
 the microphone. It reports real-time factor and WER per run.
 
@@ -156,13 +156,13 @@ tools/dev.sh run           # build, install, launch on the simulator
 tools/dev.sh push-model    # side-load the model, no server needed
 ```
 
-Open `Examples/IndicASRDemo/IndicASRDemo.xcodeproj`.
+Open `Examples/VaaniDemo/VaaniDemo.xcodeproj`.
 
-The demo builds `Sources/IndicASR` as its own framework target rather than
+The demo builds `Sources/Vaani` as its own framework target rather than
 depending on the repo root as a local Swift package. An app nested inside the
 package it depends on makes Xcode enumerate the entire repository — `.venv` and
 `models/` included, about 5 GB — and it breaks outright if the repo folder is
-also open, with "Missing package product 'IndicASR'". Building the sources
+also open, with "Missing package product 'Vaani'". Building the sources
 directly sidesteps all of that.
 
 That means the demo does not itself exercise SPM, so there is a separate check

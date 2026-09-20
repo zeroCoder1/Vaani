@@ -1,0 +1,606 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		010C050D38556973A6B0B46E /* onnxruntime in Frameworks */ = {isa = PBXBuildFile; productRef = 34E7E2E71AC779C51D7E8FC9 /* onnxruntime */; };
+		03F150DFCD1A41A15E81ECFE /* SpeechError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C455AFBB812E6C57102BCDB5 /* SpeechError.swift */; };
+		0638F8C0F33D4C8E5DAD75FD /* hi_0.wav in Resources */ = {isa = PBXBuildFile; fileRef = DC26416DF055AD36B686D3F9 /* hi_0.wav */; };
+		18158A4723E413DB60C6E46F /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC2D63E7C112C4022A76FF76 /* Language.swift */; };
+		2BA0119195226ADF4EF6754B /* Sample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10674AD0460C48F123FE298E /* Sample.swift */; };
+		32920033EF0BD682B0EDB538 /* RecognizerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DF70CB9E74D997085A0189 /* RecognizerModel.swift */; };
+		3A4DC0BD6620E0EA870E02DD /* MicrophoneCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF759E5F5B4CF7A3C89C83F /* MicrophoneCapture.swift */; };
+		5562C5DDC4E4949C95E26834 /* Vocabulary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1F6B8AC4AD28BBB4B1BC410 /* Vocabulary.swift */; };
+		7C29A5E71C13ECAEF5BD4F16 /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5295073B9310097CF962DD3E /* SpeechRecognizer.swift */; };
+		7F3EEB22B8820F87E083F793 /* hi_2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6131F7B8F869CC6DF500E4DC /* hi_2.wav */; };
+		943559D914BC6CB2AD897AAA /* MelSpectrogram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DC2D8D089E434F5B87D736 /* MelSpectrogram.swift */; };
+		962EE06C6D433B571816F68C /* ModelDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF82F57234D445020F937CB8 /* ModelDownloader.swift */; };
+		9AEEBD063EE33D0A5D952B45 /* AudioFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33056C6EDFDCA176620CF453 /* AudioFile.swift */; };
+		B1C015EAE6B07426E54D8F2F /* hi_1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5F37D804DFF7C724E4C8462E /* hi_1.wav */; };
+		BCAC7CEF4DBC966517C1BBEA /* Vaani.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2EEEA25D9AA29A2A4FA18392 /* Vaani.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CC20D21903B5C1160165AACF /* VaaniDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7096F433030FE1CC4AD4800F /* VaaniDemoApp.swift */; };
+		CEB19F58C0F8739E019A3991 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C36C114808C448CA8B3140D /* ContentView.swift */; };
+		E08B21E1150AC5DD94A444C3 /* Documentation.docc in Sources */ = {isa = PBXBuildFile; fileRef = D3C8B3E90BCF99EFA2D8737D /* Documentation.docc */; };
+		E48119266DBA89D790778B2F /* samples.json in Resources */ = {isa = PBXBuildFile; fileRef = 6D9E9ABBE5EDE5819A509983 /* samples.json */; };
+		E48CE294D453FE1AEFB697C3 /* Vaani.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2EEEA25D9AA29A2A4FA18392 /* Vaani.framework */; };
+		F642E0B536EFE8500AD9612B /* ONNX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B039817FBD6AA94D09E8CAC /* ONNX.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		CD3A5326C814C02729411211 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0103325EF00635BEF4E3DA0C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E544857F1CABF597F2C541CE;
+			remoteInfo = Vaani;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		94AD1B05C5CA1811808BEB34 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				BCAC7CEF4DBC966517C1BBEA /* Vaani.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		05DC2D8D089E434F5B87D736 /* MelSpectrogram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MelSpectrogram.swift; sourceTree = "<group>"; };
+		10674AD0460C48F123FE298E /* Sample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sample.swift; sourceTree = "<group>"; };
+		2EEEA25D9AA29A2A4FA18392 /* Vaani.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Vaani.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F63E867274C776AC120C15A /* VaaniDemo.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = VaaniDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		33056C6EDFDCA176620CF453 /* AudioFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFile.swift; sourceTree = "<group>"; };
+		3B039817FBD6AA94D09E8CAC /* ONNX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ONNX.swift; sourceTree = "<group>"; };
+		5295073B9310097CF962DD3E /* SpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
+		5F37D804DFF7C724E4C8462E /* hi_1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hi_1.wav; sourceTree = "<group>"; };
+		6131F7B8F869CC6DF500E4DC /* hi_2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hi_2.wav; sourceTree = "<group>"; };
+		6D9E9ABBE5EDE5819A509983 /* samples.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = samples.json; sourceTree = "<group>"; };
+		7096F433030FE1CC4AD4800F /* VaaniDemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaaniDemoApp.swift; sourceTree = "<group>"; };
+		7EF759E5F5B4CF7A3C89C83F /* MicrophoneCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrophoneCapture.swift; sourceTree = "<group>"; };
+		9C36C114808C448CA8B3140D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A1F6B8AC4AD28BBB4B1BC410 /* Vocabulary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vocabulary.swift; sourceTree = "<group>"; };
+		AF82F57234D445020F937CB8 /* ModelDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelDownloader.swift; sourceTree = "<group>"; };
+		C455AFBB812E6C57102BCDB5 /* SpeechError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechError.swift; sourceTree = "<group>"; };
+		D3C8B3E90BCF99EFA2D8737D /* Documentation.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = Documentation.docc; sourceTree = "<group>"; };
+		DC26416DF055AD36B686D3F9 /* hi_0.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hi_0.wav; sourceTree = "<group>"; };
+		E0DF70CB9E74D997085A0189 /* RecognizerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecognizerModel.swift; sourceTree = "<group>"; };
+		FC2D63E7C112C4022A76FF76 /* Language.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Language.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		351CAD30EE99A6D68D96AB10 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E48CE294D453FE1AEFB697C3 /* Vaani.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AE501C9473F6368ABD8DE03D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				010C050D38556973A6B0B46E /* onnxruntime in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		09AC5E989E4A264233D8C63F /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				9C36C114808C448CA8B3140D /* ContentView.swift */,
+				E0DF70CB9E74D997085A0189 /* RecognizerModel.swift */,
+				10674AD0460C48F123FE298E /* Sample.swift */,
+				7096F433030FE1CC4AD4800F /* VaaniDemoApp.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		48DBDE717642CBD40DD89819 /* Internal */ = {
+			isa = PBXGroup;
+			children = (
+				05DC2D8D089E434F5B87D736 /* MelSpectrogram.swift */,
+				3B039817FBD6AA94D09E8CAC /* ONNX.swift */,
+				A1F6B8AC4AD28BBB4B1BC410 /* Vocabulary.swift */,
+			);
+			path = Internal;
+			sourceTree = "<group>";
+		};
+		4FD0A46438C5DE483F692DC2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2EEEA25D9AA29A2A4FA18392 /* Vaani.framework */,
+				2F63E867274C776AC120C15A /* VaaniDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		64D74A1E150D9F2688FD29B5 /* Fixtures */ = {
+			isa = PBXGroup;
+			children = (
+				DC26416DF055AD36B686D3F9 /* hi_0.wav */,
+				5F37D804DFF7C724E4C8462E /* hi_1.wav */,
+				6131F7B8F869CC6DF500E4DC /* hi_2.wav */,
+				6D9E9ABBE5EDE5819A509983 /* samples.json */,
+			);
+			name = Fixtures;
+			path = Fixtures;
+			sourceTree = "<group>";
+		};
+		71DA5110B05243979F29A956 = {
+			isa = PBXGroup;
+			children = (
+				86F62A2C541AA47905B0D33C /* Indic-languages */,
+				09AC5E989E4A264233D8C63F /* Sources */,
+				4FD0A46438C5DE483F692DC2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		86F62A2C541AA47905B0D33C /* Indic-languages */ = {
+			isa = PBXGroup;
+			children = (
+				64D74A1E150D9F2688FD29B5 /* Fixtures */,
+				BAE73491E341519B04E47E09 /* Sources */,
+			);
+			name = "Indic-languages";
+			path = ../..;
+			sourceTree = "<group>";
+		};
+		BAE73491E341519B04E47E09 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				E908990F8A9543CE7C8FBE8D /* Vaani */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		E908990F8A9543CE7C8FBE8D /* Vaani */ = {
+			isa = PBXGroup;
+			children = (
+				33056C6EDFDCA176620CF453 /* AudioFile.swift */,
+				D3C8B3E90BCF99EFA2D8737D /* Documentation.docc */,
+				FC2D63E7C112C4022A76FF76 /* Language.swift */,
+				7EF759E5F5B4CF7A3C89C83F /* MicrophoneCapture.swift */,
+				AF82F57234D445020F937CB8 /* ModelDownloader.swift */,
+				C455AFBB812E6C57102BCDB5 /* SpeechError.swift */,
+				5295073B9310097CF962DD3E /* SpeechRecognizer.swift */,
+				48DBDE717642CBD40DD89819 /* Internal */,
+			);
+			path = Vaani;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1435CF43E084E4831BD16206 /* VaaniDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C9C5DEA31280C786DEFD8450 /* Build configuration list for PBXNativeTarget "VaaniDemo" */;
+			buildPhases = (
+				28E604E7224BC577AEAC44B1 /* Sources */,
+				7E5206AFCEC1C03561108FD9 /* Resources */,
+				351CAD30EE99A6D68D96AB10 /* Frameworks */,
+				94AD1B05C5CA1811808BEB34 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F15B5C98104BF20294B5D60C /* PBXTargetDependency */,
+			);
+			name = VaaniDemo;
+			packageProductDependencies = (
+			);
+			productName = VaaniDemo;
+			productReference = 2F63E867274C776AC120C15A /* VaaniDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E544857F1CABF597F2C541CE /* Vaani */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C828681617D413701A8EC3A0 /* Build configuration list for PBXNativeTarget "Vaani" */;
+			buildPhases = (
+				ED00C6AEC998D0F890726777 /* Sources */,
+				AE501C9473F6368ABD8DE03D /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Vaani;
+			packageProductDependencies = (
+				34E7E2E71AC779C51D7E8FC9 /* onnxruntime */,
+			);
+			productName = Vaani;
+			productReference = 2EEEA25D9AA29A2A4FA18392 /* Vaani.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0103325EF00635BEF4E3DA0C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					1435CF43E084E4831BD16206 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					E544857F1CABF597F2C541CE = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 243077358CE0B56E618829A8 /* Build configuration list for PBXProject "VaaniDemo" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 71DA5110B05243979F29A956;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				9D3BBC4AA9C5742C8D8F261C /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 4FD0A46438C5DE483F692DC2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E544857F1CABF597F2C541CE /* Vaani */,
+				1435CF43E084E4831BD16206 /* VaaniDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7E5206AFCEC1C03561108FD9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0638F8C0F33D4C8E5DAD75FD /* hi_0.wav in Resources */,
+				B1C015EAE6B07426E54D8F2F /* hi_1.wav in Resources */,
+				7F3EEB22B8820F87E083F793 /* hi_2.wav in Resources */,
+				E48119266DBA89D790778B2F /* samples.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		28E604E7224BC577AEAC44B1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CEB19F58C0F8739E019A3991 /* ContentView.swift in Sources */,
+				32920033EF0BD682B0EDB538 /* RecognizerModel.swift in Sources */,
+				2BA0119195226ADF4EF6754B /* Sample.swift in Sources */,
+				CC20D21903B5C1160165AACF /* VaaniDemoApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED00C6AEC998D0F890726777 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9AEEBD063EE33D0A5D952B45 /* AudioFile.swift in Sources */,
+				E08B21E1150AC5DD94A444C3 /* Documentation.docc in Sources */,
+				18158A4723E413DB60C6E46F /* Language.swift in Sources */,
+				943559D914BC6CB2AD897AAA /* MelSpectrogram.swift in Sources */,
+				3A4DC0BD6620E0EA870E02DD /* MicrophoneCapture.swift in Sources */,
+				962EE06C6D433B571816F68C /* ModelDownloader.swift in Sources */,
+				F642E0B536EFE8500AD9612B /* ONNX.swift in Sources */,
+				03F150DFCD1A41A15E81ECFE /* SpeechError.swift in Sources */,
+				7C29A5E71C13ECAEF5BD4F16 /* SpeechRecognizer.swift in Sources */,
+				5562C5DDC4E4949C95E26834 /* Vocabulary.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F15B5C98104BF20294B5D60C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E544857F1CABF597F2C541CE /* Vaani */;
+			targetProxy = CD3A5326C814C02729411211 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		404CB8C34635CC1A04F2C9F3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.vaani.framework;
+				PRODUCT_NAME = Vaani;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		45993CA3B197AD78051EFEBC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = VaaniDemo.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Vaani;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Download the speech model from a development server on your network.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Record speech to transcribe on device.";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vaani.demo;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		52652D14DB25CE3CA957511B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.vaani.framework;
+				PRODUCT_NAME = Vaani;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		705E2EB2C5FD3580347D128B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = VaaniDemo.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Vaani;
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Download the speech model from a development server on your network.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Record speech to transcribe on device.";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vaani.demo;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		AD58D7C2ABE39859E7AB5DCB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		EB89FA77C514E0DAF7E730E4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		243077358CE0B56E618829A8 /* Build configuration list for PBXProject "VaaniDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EB89FA77C514E0DAF7E730E4 /* Debug */,
+				AD58D7C2ABE39859E7AB5DCB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C828681617D413701A8EC3A0 /* Build configuration list for PBXNativeTarget "Vaani" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				52652D14DB25CE3CA957511B /* Debug */,
+				404CB8C34635CC1A04F2C9F3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C9C5DEA31280C786DEFD8450 /* Build configuration list for PBXNativeTarget "VaaniDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				705E2EB2C5FD3580347D128B /* Debug */,
+				45993CA3B197AD78051EFEBC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9D3BBC4AA9C5742C8D8F261C /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/microsoft/onnxruntime-swift-package-manager";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.24.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		34E7E2E71AC779C51D7E8FC9 /* onnxruntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9D3BBC4AA9C5742C8D8F261C /* XCRemoteSwiftPackageReference "onnxruntime-swift-package-manager" */;
+			productName = onnxruntime;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 0103325EF00635BEF4E3DA0C /* Project object */;
+}
