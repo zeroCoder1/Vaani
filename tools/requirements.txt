@@ -1,0 +1,12 @@
+numpy
+onnx
+onnxruntime
+onnxconverter_common
+huggingface_hub
+soundfile
+# reference-parity + sample extraction only
+torch
+librosa
+pyarrow
+fsspec
+aiohttp
