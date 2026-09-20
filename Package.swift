@@ -7,6 +7,7 @@
 //
 
 import PackageDescription
+import class Foundation.ProcessInfo
 
 let package = Package(
     name: "IndicASR",
@@ -31,3 +32,14 @@ let package = Package(
         .testTarget(name: "IndicASRTests", dependencies: ["IndicASR"]),
     ]
 )
+
+// The DocC plugin is only needed to render documentation locally, so it is
+// added on demand rather than making every consumer resolve it:
+//
+//     INDICASR_DOCS=1 swift package generate-documentation --target IndicASR
+//
+// Swift Package Index builds the docs from .spi.yml without it.
+if ProcessInfo.processInfo.environment["INDICASR_DOCS"] != nil {
+    package.dependencies.append(
+        .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.3.0"))
+}
