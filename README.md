@@ -14,11 +14,25 @@ and what each script in `tools/` does, see
 
 ## Install
 
+Add the package in Xcode via **File → Add Package Dependencies**, or in a
+`Package.swift`:
+
 ```swift
-.package(url: "https://github.com/<you>/IndicASR", from: "1.0.0")
+dependencies: [
+    .package(url: "https://github.com/zeroCoder1/Indic-languages", from: "1.0.0")
+],
+targets: [
+    .target(name: "YourApp", dependencies: [
+        .product(name: "IndicASR", package: "Indic-languages")
+    ])
+]
 ```
 
-Requires iOS 16 / macOS 14.
+Note the two names: the product is `IndicASR`, but `package:` is the
+repository name, `Indic-languages`. Swift Package Manager derives the package
+identifier from the URL, not from the product.
+
+Requires iOS 16 / macOS 14. The only dependency is ONNX Runtime.
 
 ## Use
 
