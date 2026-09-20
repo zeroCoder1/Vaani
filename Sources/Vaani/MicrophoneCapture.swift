@@ -31,9 +31,28 @@ public final class MicrophoneCapture: @unchecked Sendable {
     private let lock = NSLock()
     private var samples: [Float] = []
     private var tapInstalled = false
+    private var handler: (@Sendable ([Float]) -> Void)?
+    private var retains = true
 
     /// Creates a recorder. No audio session is touched until ``start()``.
     public init() {}
+
+    /// Receive audio as it arrives, instead of waiting for ``stop()``.
+    ///
+    /// The handler is called on an internal audio queue with mono 16 kHz
+    /// samples, so it must return quickly; hand work to another queue rather
+    /// than doing it here.
+    ///
+    /// Set `retainingSamples` to false for long sessions. Retained audio grows
+    /// at about 64 KB per second, so an hour of recording is roughly 230 MB,
+    /// and ``stop()`` then returns nothing.
+    public func stream(retainingSamples: Bool = false,
+                       to handler: @escaping @Sendable ([Float]) -> Void) {
+        lock.withLock {
+            self.handler = handler
+            self.retains = retainingSamples
+        }
+    }
 
     deinit {
         if tapInstalled { engine.inputNode.removeTap(onBus: 0) }
@@ -176,8 +195,14 @@ public final class MicrophoneCapture: @unchecked Sendable {
             return buffer
         }
         guard failure == nil, let channel = converted.floatChannelData else { return }
-        let chunk = UnsafeBufferPointer(start: channel[0], count: Int(converted.frameLength))
-        lock.withLock { samples.append(contentsOf: chunk) }
+        let chunk = Array(UnsafeBufferPointer(start: channel[0],
+                                              count: Int(converted.frameLength)))
+
+        let deliver: (@Sendable ([Float]) -> Void)? = lock.withLock {
+            if retains { samples.append(contentsOf: chunk) }
+            return handler
+        }
+        deliver?(chunk)
     }
 }
 #endif
