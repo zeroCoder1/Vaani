@@ -4,6 +4,10 @@ Offline speech-to-text for 22 Indian languages on iOS, running AI4Bharat's
 [IndicConformer 600M](https://huggingface.co/ai4bharat/indic-conformer-600m-multilingual)
 through ONNX Runtime. No network at inference time.
 
+For how the model was shrunk from 2.4 GB to something a phone will download,
+and what each script in `tools/` does, see
+[docs/MODEL_PIPELINE.md](docs/MODEL_PIPELINE.md).
+
 ## Install
 
 ```swift
@@ -104,6 +108,10 @@ export HF_TOKEN=hf_...
 Host `models/int8_nc/` on any static server and point `ModelDownloader` at it.
 AI4Bharat's repo is gated, so an app cannot download from it directly.
 
+`tools/dev.sh stage` assembles exactly the files a host needs into
+`models/upload/`, with checksums. See
+[docs/MODEL_PIPELINE.md](docs/MODEL_PIPELINE.md) for what each step does.
+
 ### What quantization costs
 
 25 FLEURS Hindi clips, 318 s of audio, greedy CTC:
@@ -175,23 +183,17 @@ weights gets the app jetsammed on an 8 GB device.
 
 ## Three things that will bite you
 
-All three fail silently — nothing throws, the output just gets worse.
+All three fail silently — nothing throws, the output just gets worse. Full
+detail and the measurements behind them are in
+[docs/MODEL_PIPELINE.md](docs/MODEL_PIPELINE.md#three-findings-that-cost-real-measurement).
 
-The analysis window is a *symmetric* Hann, `torch.hann_window(periodic: false)`,
-not the periodic Hann librosa and scipy default to. Using the wrong one shifts
-normalized features by about 0.17. With the right one the Swift frontend matches
-AI4Bharat's TorchScript preprocessor to 3.5e-05 across the realistic amplitude
-range.
-
-`config.json` gives `SOS: 256` and it is wrong. The transducer start token is
-5632. AI4Bharat's own code never reads `config.json` — `from_pretrained` builds
-the config from kwargs and takes the 5632 default — so their path works by
-accident. Following the file drops the leading token: WER 0.125 against 0.083.
-
-Transducer token feedback uses local, per-language ids (0…255), even though
-`prediction.embed.weight` is `(5633, 640)`. Remapping to global ids
-(`languageIndex * 256 + token`) looks more principled and collapses decoding into
-repeated garbage, WER above 3.
+- The analysis window is a **symmetric** Hann, not the periodic one librosa
+  and scipy default to. The wrong one shifts features by ~0.17.
+- `config.json` says `SOS: 256` and is **wrong**; the transducer start token
+  is 5632. Following the file drops the leading token.
+- Transducer feedback uses **local** per-language token ids, even though the
+  embedding is over the global vocabulary. Remapping to global ids collapses
+  decoding into garbage.
 
 ## Tools
 
@@ -203,7 +205,8 @@ repeated garbage, WER above 3.
 | `tools/reference_frontend.py` | numpy log-mel reference and golden vectors |
 | `tools/run_reference.py` | numpy/ORT decoder used as the parity reference and WER harness |
 | `tools/make_manifest.py` | generate `manifest.json` for `ModelDownloader` |
-| `tools/dev.sh` | build, test, run, serve, push-model, xcode |
+| `tools/stage_upload.py` | assemble `models/upload/` with exactly what a host needs |
+| `tools/dev.sh` | build, test, run, serve, push-model, stage, xcode |
 | `tools/check-integration.sh` | build a throwaway consumer against the package over SPM |
 
 ## Tests
