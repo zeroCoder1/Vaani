@@ -44,7 +44,7 @@ struct ContentView: View {
 
             case .downloading(let file, let fraction, let index, let count):
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Downloading \(index + 1) of \(count)").font(.subheadline)
+                    Text("Downloading \(index + 1) of \(count) files").font(.subheadline)
                     Text(file).font(.caption).foregroundStyle(.secondary)
                     ProgressView(value: fraction)
                     Text("\(Int(fraction * 100))%").font(.caption2).foregroundStyle(.secondary)

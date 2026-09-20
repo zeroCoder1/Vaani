@@ -86,8 +86,9 @@ targets:
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationPortrait"
         INFOPLIST_KEY_NSMicrophoneUsageDescription: "Record speech to transcribe on device."
-        # Fetching the model from a dev server on your LAN triggers the iOS 14+
-        # local-network prompt; without this the app is denied silently.
+        # NSLocalNetworkUsageDescription and the ATS exemption below are only
+        # needed to reach tools/dev.sh serve on the LAN. The shipped default is
+        # HTTPS, so uncomment them only while testing against a dev server.
         INFOPLIST_KEY_NSLocalNetworkUsageDescription: "Download the speech model from a development server on your network."
 
         SWIFT_VERSION: "5.9"

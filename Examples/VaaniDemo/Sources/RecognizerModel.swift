@@ -46,7 +46,7 @@ final class RecognizerModel: ObservableObject {
     /// Default host for the demo. Override it in the app's Settings section, or
     /// point it at `tools/dev.sh serve` when testing changes to the model.
     @AppStorage("modelSource") var source = RecognizerModel.defaultSource
-    static let defaultSource = "https://pub-2b0e4d9b945b42f580f49f58405101d7.r2.dev"
+    static let defaultSource = "https://model.supr.works"
 
     let samples = Sample.bundled
 
@@ -169,7 +169,7 @@ final class RecognizerModel: ObservableObject {
             ) { [weak self] p in
                 Task { @MainActor in
                     self?.benchmarkProgress =
-                        "Downloading \(p.file) \(Int(p.fraction * 100))%"
+                        "Downloading \(Int(p.totalFraction * 100))%"
                 }
             }
 
