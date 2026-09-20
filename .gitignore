@@ -1,62 +1,89 @@
-# Xcode
-#
-# gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
+# ─── macOS ────────────────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
 
+# ─── Xcode / Swift ────────────────────────────────────────────────────────
 ## User settings
 xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
 
-## Obj-C/Swift specific
+## Build products
+.build/
+DerivedData/
+build/
 *.hmap
-
-## App packaging
 *.ipa
-*.dSYM.zip
 *.dSYM
+*.dSYM.zip
+*.xcresult
+
+## Swift Package Manager
+.swiftpm/
+# Package.resolved is committed on purpose: it pins onnxruntime and friends
+# to exact versions so model-runtime behaviour is reproducible across machines.
 
 ## Playgrounds
 timeline.xctimeline
 playground.xcworkspace
 
-# Swift Package Manager
-#
-# Add this line if you want to avoid checking in source code from Swift Package Manager dependencies.
-# Packages/
-# Package.pins
-# Package.resolved
-# *.xcodeproj
-#
-# Xcode automatically generates this directory with a .xcworkspacedata file and xcuserdata
-# hence it is not needed unless you have added a package configuration file to your project
-# .swiftpm
-
-.build/
-
-# CocoaPods
-#
-# We recommend against adding the Pods directory to your .gitignore. However
-# you should judge for yourself, the pros and cons are mentioned at:
+# ─── CocoaPods ────────────────────────────────────────────────────────────
+# Pods/ is intentionally NOT ignored — see
 # https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
-#
-# Pods/
-#
-# Add this line if you want to avoid checking in source code from the Xcode workspace
-# *.xcworkspace
+# But the ONNX Runtime pod ships a large xcframework; if it lands in Pods/,
+# reconsider and vendor it via SPM instead.
 
-# Carthage
-#
-# Add this line if you want to avoid checking in source code from Carthage dependencies.
-# Carthage/Checkouts
-
+# ─── Carthage / fastlane ──────────────────────────────────────────────────
 Carthage/Build/
-
-# fastlane
-#
-# It is recommended to not store the screenshots in the git repo.
-# Instead, use fastlane to re-generate the screenshots whenever they are needed.
-# For more information about the recommended setup visit:
-# https://docs.fastlane.tools/best-practices/source-control/#source-control
-
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# ─── Python (conversion + validation harness) ─────────────────────────────
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# ─── Secrets ──────────────────────────────────────────────────────────────
+# HF_TOKEN lives here for the gated ai4bharat repo — never commit it.
+.env
+.env.*
+*.token
+.huggingface/
+
+# ─── Model weights ────────────────────────────────────────────────────────
+# Matched by pattern, not by directory name: quantization experiments spawn
+# ad-hoc output dirs (models/int8-perchannel/, models/fp16-keepio/, ...) and
+# a single stray encoder shard is 2.4 GB.
+*.onnx
+*.onnx.data
+*.onnx_data
+*.nemo
+*.ckpt
+*.pt
+*.pth
+*.safetensors
+*.tflite
+*.mlmodel
+*.mlpackage/
+*.mlmodelc/
+
+# Everything downloaded or generated under models/ is reproducible from
+# tools/fetch_model.py + tools/quantize.py.
+# Everything under models/ is downloaded or generated; test fixtures live in
+# Fixtures/ instead.
+models/
+
+# Scratch working set for tools/run_reference.py. Regenerable, and the three
+# clips the tests and demo actually use live in Fixtures/.
+samples/

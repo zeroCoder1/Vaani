@@ -1,0 +1,31 @@
+IndicASR
+Copyright (c) 2026 Shrutesh Sharma
+
+This product includes third-party material.
+
+--------------------------------------------------------------------------------
+IndicConformer 600M Multilingual
+--------------------------------------------------------------------------------
+Speech recognition weights by AI4Bharat, licensed under the MIT License.
+
+    https://huggingface.co/ai4bharat/indic-conformer-600m-multilingual
+
+The quantized build this project distributes is a derivative of that model,
+produced by tools/quantize.py. Access to the original weights is gated; obtain
+them from the link above under AI4Bharat's terms.
+
+--------------------------------------------------------------------------------
+FLEURS
+--------------------------------------------------------------------------------
+The Hindi audio clips in Fixtures/ are from the FLEURS dataset, published by
+Google under CC BY 4.0.
+
+    https://huggingface.co/datasets/google/fleurs
+    https://creativecommons.org/licenses/by/4.0/
+
+--------------------------------------------------------------------------------
+ONNX Runtime
+--------------------------------------------------------------------------------
+Runtime dependency by Microsoft, licensed under the MIT License.
+
+    https://github.com/microsoft/onnxruntime
