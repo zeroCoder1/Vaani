@@ -134,17 +134,36 @@ of once per clip.
 
 ### Which to use
 
-| | CTC | RNNT |
-| --- | --- | --- |
-| real-time factor (Mac) | ~0.04 | ~0.11–0.27 |
-| extra download | — | 42 MB, plus 0.17 MB per language |
-| WER on `hi_0.wav` | 0.042 | 0.083 |
+Measured over 25 FLEURS Hindi clips, 318 seconds of audio, on an iPhone 15
+Pro and an Apple Silicon Mac:
+
+| | CTC (iPhone) | RNNT (iPhone) | CTC (Mac) | RNNT (Mac) |
+| --- | --- | --- | --- | --- |
+| mean WER | 10.1% | 10.3% | 10.3% | 10.2% |
+| median WER | 10.0% | 10.0% | 10.0% | 8.3% |
+| real-time factor | 0.050 | 0.064 | 0.045 | 0.061 |
+| wall clock | 16s | 20s | 14s | 19s |
+| extra download | — | 42 MB | — | 42 MB |
+
+**Use CTC.** The two are within 0.2 points of each other on accuracy and swap
+places between platforms, so the difference is noise on this set. CTC is about
+28% faster and 42 MB smaller for the same result.
 
 Transducers usually win on accuracy because of that built-in language
-modelling. On the single clip measured here CTC came out ahead, but one
-9-second sample is not evidence — run both across a real set before choosing.
-CTC is the default mainly for the 3–6x speed difference, which is far more
-noticeable on a phone than on a desktop.
+modelling, and they may well win on your audio — Hindi read speech from FLEURS
+is clean and fairly formal. Measure before paying for it.
+
+Two things worth noting from those numbers. The phone is within 12% of the
+desktop, so an A17 Pro transcribes 318 seconds of audio in 16 — roughly 20
+times faster than real time. And the transducer's per-symbol loop costs less
+than it looks: 1.3x, not the several-fold penalty its structure suggests.
+
+To reproduce the desktop column on your own clips:
+
+```bash
+.venv/bin/python tools/run_reference.py --model models/int8_nc --lang hi \
+    --decoding both --limit 25
+```
 
 ## Shipping this in your own app
 

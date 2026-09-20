@@ -53,11 +53,12 @@ is fast.
 that sees the tokens emitted so far, effectively a small language model — and
 a joint network combining it with the encoder output. Decoding becomes a loop
 that emits tokens until it emits blank, so the runtime is invoked once per
-symbol rather than once per clip. That usually buys accuracy and always costs
-speed: roughly 3 to 6 times slower, plus 42 MB of graphs.
+symbol rather than once per clip.
 
-CTC is the default. Reach for the transducer only once you have measured it
-winning on your own audio.
+CTC is the default. Measured over 25 FLEURS Hindi clips on an iPhone 15 Pro,
+the two land within 0.2 points of each other on word error rate while CTC runs
+about 28% faster and needs 42 MB less. Transducers often do win on accuracy,
+so measure on your own audio before paying for it.
 
 Loading both shares the one encoder rather than paying for it twice:
 
